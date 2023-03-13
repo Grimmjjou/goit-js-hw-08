@@ -19,13 +19,13 @@ function onSubmitForm(e) {
     e.currentTarget.reset();
     console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
     localStorage.removeItem(STORAGE_KEY);
-    console.clear()
+    
   } else {
     alert('Заповніть порожні поля!');
   }
 
 }
-
+console.clear()
 function onSaveInput(e) {
   const userMessage = e.target.value;
   const userEmail = e.target.name;
