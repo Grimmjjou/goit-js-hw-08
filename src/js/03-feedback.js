@@ -8,14 +8,10 @@ const refs = {
 
 const STORAGE_KEY = 'feedback-form-state';
 const formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-
-
 getFormOutput();
-
 
 refs.form.addEventListener('input', throttle(onSaveInput, 500));
 refs.form.addEventListener('submit', onSubmitForm);
-
 
 function onSubmitForm(e) {
   if (formData.email && formData.message) {
@@ -25,10 +21,9 @@ function onSubmitForm(e) {
     localStorage.removeItem(STORAGE_KEY);
     formData = {};
   } else {
-    alert('Заполните все поля, пожалуйста!');
+    alert('Заповніть порожні поля!');
   }
 }
-
 
 function onSaveInput(e) {
   const userMessage = e.target.value;
