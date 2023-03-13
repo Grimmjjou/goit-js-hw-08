@@ -22,6 +22,7 @@ function onSubmitForm(e) {
   } else {
     alert('Заповніть порожні поля!');
   }
+  console.clear()
 }
 
 function onSaveInput(e) {
