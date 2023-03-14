@@ -15,6 +15,7 @@ refs.form.addEventListener('submit', onSubmitForm);
 
 function onSubmitForm(e) {
   if (formData.email && formData.message) {
+    console.clear();
     e.preventDefault();
     e.currentTarget.reset();
     console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
@@ -25,7 +26,7 @@ function onSubmitForm(e) {
   }
 
 }
-console.clear()
+
 function onSaveInput(e) {
   const userMessage = e.target.value;
   const userEmail = e.target.name;
