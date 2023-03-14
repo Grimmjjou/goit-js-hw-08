@@ -22,20 +22,10 @@ function onInput(e) {
 const saveLocalItems = localStorage.getItem(STORAGE_INPUT_KEY);
 const parsSaveLocalItems = JSON.parse(saveLocalItems);
 
-function getLocalStorageItems() {
-  if (saveLocalItems) {
-    !parsSaveLocalItems.email
-      ? ''
-      : (refs.email.value = parsSaveLocalItems.email);
-    !parsSaveLocalItems.message
-      ? ''
-      : (refs.message.value = parsSaveLocalItems.message);
-  }
-}
 
-getLocalStorageItems();
 
 function onFormSubmit(e) {
+  console.clean();
   e.preventDefault();
 
   const {
