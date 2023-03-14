@@ -13,18 +13,19 @@ getFormOutput();
 refs.form.addEventListener('input', throttle(onSaveInput, 500));
 refs.form.addEventListener('submit', onSubmitForm);
 
-function onSubmitForm(e) {
-  if (formData.email && formData.message) {
-    console.clear();
-    e.preventDefault();
-    e.currentTarget.reset();
-    console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
-    localStorage.removeItem(STORAGE_KEY);
-    
-  } else {
-    alert('Заповніть порожні поля!');
-  }
 
+function onSubmitForm(e) {
+  console.clear();
+  e.preventDefault();
+       if (refs.input.value === "" || refs.textarea.value === "") {
+           return alert(`Заповніть порожні поля!!`);
+       }
+  const { email, message } = e.currentTarget.elements;
+  console.log({ email: email.value, message: message.value });
+  console.log(formData);
+  e.currentTarget.reset();
+  localStorage.removeItem(LOCAL_KEY);
+  formData = {};
 }
 
 function onSaveInput(e) {
