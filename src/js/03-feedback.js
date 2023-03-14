@@ -1,37 +1,59 @@
 import throttle from 'lodash.throttle';
 
-const LOCAL_KEY = 'feedback-form-state';
+const refs = {
+  form: document.querySelector('.feedback-form'),
+  email: document.querySelector('input[type="email"]'),
+  message: document.querySelector('textarea[name="message"]'),
+};
 
-form = document.querySelector('.feedback-form');
+refs.form.addEventListener('input', throttle(onInput, 500));
+refs.form.addEventListener('submit', onFormSubmit);
 
-form.addEventListener('input', throttle(onInputData, 500));
-form.addEventListener('submit', onFormSubmit);
+const STORAGE_INPUT_KEY = 'feedback-form-state';
 
-let dataForm = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
-const { email, message } = form.elements;
-reloadPage();
+function onInput(e) {
+  const userDetails = JSON.parse(localStorage.getItem(STORAGE_INPUT_KEY)) || {};
+  console.log(userDetails);
+  userDetails[e.target.name] = e.target.value;
 
-function onInputData(e) {
-  dataForm = { email: email.value, message: message.value };
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(dataForm));
+  localStorage.setItem(STORAGE_INPUT_KEY, JSON.stringify(userDetails));
 }
 
-function reloadPage() {
-  if (dataForm) {
-    email.value = dataForm.email || '';
-    message.value = dataForm.message || '';
+const saveLocalItems = localStorage.getItem(STORAGE_INPUT_KEY);
+const parsSaveLocalItems = JSON.parse(saveLocalItems);
+
+function getLocalStorageItems() {
+  if (saveLocalItems) {
+    !parsSaveLocalItems.email
+      ? ''
+      : (refs.email.value = parsSaveLocalItems.email);
+    !parsSaveLocalItems.message
+      ? ''
+      : (refs.message.value = parsSaveLocalItems.message);
   }
 }
+
+getLocalStorageItems();
 
 function onFormSubmit(e) {
   e.preventDefault();
-  console.log({ email: email.value, message: message.value });
+
+  const {
+    elements: { email, message },
+  } = e.currentTarget;
 
   if (email.value === '' || message.value === '') {
-    return alert('Заповніть всі поля!');
+    return alert('Введіть всі поля форми!!!');
   }
 
-  localStorage.removeItem(LOCAL_KEY);
+  const formElDetails = { email: email.value, message: message.value };
+  console.log(formElDetails);
+
   e.currentTarget.reset();
-  dataForm = {};
+
+  removeStorageItems();
+}
+
+function removeStorageItems() {
+  localStorage.removeItem(STORAGE_INPUT_KEY);
 }
