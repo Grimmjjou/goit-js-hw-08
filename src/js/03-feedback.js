@@ -18,11 +18,11 @@ function onFormInput() {
 refs.form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(event) {
-  console.clear();
+  
     event.preventDefault();
   
     if (!event.target.email.value  || !event.target.message.value) {
-        alert('Заповніть усі поля форми');
+        alert('Заповніть усі поля');
         return;        
     }
     console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)));
