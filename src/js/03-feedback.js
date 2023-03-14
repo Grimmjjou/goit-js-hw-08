@@ -1,46 +1,37 @@
 import throttle from 'lodash.throttle';
 
-const refs = {
-  form: document.querySelector('.feedback-form'),
-  email: document.querySelector('input'),
-  message: document.querySelector('textarea'),
-};
+const LOCAL_KEY = 'feedback-form-state';
 
-const STORAGE_KEY = 'feedback-form-state';
-const formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-getFormOutput();
+form = document.querySelector('.feedback-form');
 
-refs.form.addEventListener('input', throttle(onSaveInput, 500));
-refs.form.addEventListener('submit', onSubmitForm);
+form.addEventListener('input', throttle(onInputData, 500));
+form.addEventListener('submit', onFormSubmit);
 
+let dataForm = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+const { email, message } = form.elements;
+reloadPage();
 
-function onSubmitForm(e) {
-  console.clear();
-  e.preventDefault();
-       if (refs.input.value === "" || refs.textarea.value === "") {
-           return alert(`Заповніть порожні поля!!`);
-       }
-  const { email, message } = e.currentTarget.elements;
-  console.log({ email: email.value, message: message.value });
-  console.log(formData);
-  e.currentTarget.reset();
-  localStorage.removeItem(LOCAL_KEY);
-  formData = {};
+function onInputData(e) {
+  dataForm = { email: email.value, message: message.value };
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(dataForm));
 }
 
-function onSaveInput(e) {
-  const userMessage = e.target.value;
-  const userEmail = e.target.name;
-  formData[userEmail] = userMessage;
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-}
-
-function getFormOutput() {
-  const savedFormData = JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-  if (savedFormData) {
-    refs.email.value = savedFormData.email || '';
-    refs.message.value = savedFormData.message || '';
+function reloadPage() {
+  if (dataForm) {
+    email.value = dataForm.email || '';
+    message.value = dataForm.message || '';
   }
+}
+
+function onFormSubmit(e) {
+  e.preventDefault();
+  console.log({ email: email.value, message: message.value });
+
+  if (email.value === '' || message.value === '') {
+    return alert('Заповніть всі поля!');
+  }
+
+  localStorage.removeItem(LOCAL_KEY);
+  e.currentTarget.reset();
+  dataForm = {};
 }
